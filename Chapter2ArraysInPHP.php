@@ -63,3 +63,13 @@
     ! W językach PHP w ramach jednej tablicy można łączyć tablice liczbowe i asocjacyjne. W takim przypadku trzeba jednak zachować dużą ostrożność przy wyborze właściwego sposobu
     iteracji elementów tego rodzaju tablicy. W takich sytuacjach pętla foreach okaże się zwykle lepszym wyborem niż pętle for oraz while. 
 */
+
+
+/*
+UŻYWANIE TABLIC JAKO ELASTYCZNEGO SPOSOBU PRZECHOWYWANIA DANYCH
+
+Język PHP umożliwa nie tylko tworzenie dynamicznych tablic, lecz również zapewnia szereg wbudowanych funkcji odpowiedzialnych za przeprowadzenie rozmaitych działań na tablicach. 
+Przykładami mogą tu być m.in. funkcje:
+array_intersect, array_merge, array_diff, array_push, array_pop, prev, next, current czy end. 
+
+*/
