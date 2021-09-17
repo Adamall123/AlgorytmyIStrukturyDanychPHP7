@@ -73,3 +73,46 @@ Przykładami mogą tu być m.in. funkcje:
 array_intersect, array_merge, array_diff, array_push, array_pop, prev, next, current czy end. 
 
 */
+
+/* UŻYWANIE WIELOWYMIAROWYCH TABLIC DO REPREZENTOWANIA STRUKTUR DANYCH
+
+Przykład: Odwzorowanie grafu przy użyciu tablicy wielowymiarowej - graf narysowany na stronie 45.
+
+W tym celu trzeba skonstruować dwuwymiarową tablicę, w której kluczami są węzły, a wartościami liczby 0 lub 1 w zależności od tego, czy odpowiednie dwa węzły są ze sobą połączoe
+czy też nie. 
+
+*/
+$graph = [];
+$nodes = ['A', 'B', 'C', 'D', 'E'];
+foreach($nodes as $xNode){
+    foreach($nodes as $yNode){
+        $graph[$xNode][$yNode] = 0;
+    }
+}
+foreach($nodes as $xNode){
+    foreach($nodes as $yNode){
+        echo $graph[$xNode][$yNode] . "\t";
+    }
+    echo "\n";
+}
+$graph['A']['B'] = 1; 
+$graph['B']['A'] = 1;
+$graph['A']['C'] = 1;  
+$graph['C']['A'] = 1; 
+$graph['A']['E'] = 1; 
+$graph['E']['A'] = 1; 
+$graph['B']['E'] = 1; 
+$graph['E']['B'] = 1; 
+$graph['B']['D'] = 1; 
+$graph['D']['B'] = 1; 
+
+echo "\n";
+echo "   A\t B\t C\t D\t E\t\n";
+foreach($nodes as $xNode){
+    echo $xNode . " |";
+    foreach($nodes as $yNode){
+       
+        echo $graph[$xNode][$yNode] . "\t";
+    }
+    echo "\n";
+}
