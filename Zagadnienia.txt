@@ -1,0 +1,7 @@
+Celem jest nauka implementacji algorytmów i struktur danych w PHP. 
+Najważniejsze zagadnienia:
+1) Podstawy analizy algorytmów i struktur danych.
+2) Tablice, listy i drzewa.
+3) Stosy, kolejki i algorytmy rekurencyjne. 
+4) Sortowanie, wyszukiwanie, sterty i kopce. 
+5) Wsparcie ze strony PHP, w tym biblioteki PECL i Tarsana. 
