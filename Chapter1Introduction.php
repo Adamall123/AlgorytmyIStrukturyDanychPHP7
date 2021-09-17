@@ -27,34 +27,29 @@
                 remove the book from the list L
                 place it to the bookshelf
 */
-
-    $givenBooks = ['Czlowiek w poszukiwaniu sensu zycia', 'Algorytmy i Struktury Danych', 'Rusz glowa - wzorce projektowe', 'Make people like you in 90 seconds'];
-    $orderedBooks = ['Algorytmy i Struktury Danych', 'Rusz glowa - wzorce projektowe','Czlowiek w poszukiwaniu sensu zycia'];
-    $bookshelf = [];
-    function findABook($givenBooks, $bookName){
-        if(count($givenBooks) == 0) return null;
+    function findABook(Array $givenBooks,String $bookName){
         $found = false;
-        foreach($givenBooks as $key=>$book){
-            if($book == $bookName){
-                $found = $key;
+        foreach($givenBooks as $index=>$book){
+            if($book === $bookName){
+                $found = $index;
+                break;
             }
         }
         return $found;
     }
-    function placeAllBooks($orderedBooks, &$givenBooks){
+    function placeAllBooks(Array $orderedBooks,Array &$givenBooks){
         foreach($orderedBooks as $bookName){
-            $positionOfFoundedBook = findABook($givenBooks, $bookName);
-            if(is_numeric($positionOfFoundedBook)){
-                unset($givenBooks[$positionOfFoundedBook]);
-                global $bookshelf;
-                array_push($bookshelf, $bookName);
+            $bookFound = findABook($givenBooks, $bookName);
+            if($bookFound !== FALSE){
+                //array_splice(array, start, length, array)
+                array_splice($givenBooks, $bookFound, 1);
             }
         }
     }
+    $givenBooks = ['Czlowiek w poszukiwaniu sensu zycia', 'Algorytmy i Struktury Danych', 'Rusz glowa - wzorce projektowe', 'Make people like you in 90 seconds'];
+    $orderedBooks = ['Algorytmy i Struktury Danych', 'Rusz glowa - wzorce projektowe'];
+
     placeAllBooks($orderedBooks, $givenBooks);
-    echo "Books added to bookshelf\n";
-    foreach($bookshelf as $key=>$book){
-        echo "${key}.${book}\n";
-    }
+    echo implode(",", $givenBooks);
 
     
