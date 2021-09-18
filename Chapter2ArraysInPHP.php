@@ -116,3 +116,54 @@ foreach($nodes as $xNode){
     }
     echo "\n";
 }
+
+/*
+    TWORZENIE TABLIC O STAŁYM ROZMIARZE ZA POMOCĄ KLASY SplFixedArray
+    
+    Gdy wiemy, że potrzebujemy jedynie tablicy o określonej liczbie elemtnów, możemy użyć tablicy o ustalonej wielkości w celu ograniczenia zużycia pamięci operacyjnej. 
+*/
+echo "Stworzenie obiektu SplxFixedArray - rozmiar tablicy staly\n";
+$array = new SplFixedArray(10);
+for ($i = 0; $i < 10; $i++){
+    $array[$i] = $i; 
+}
+for ($i = 0; $i < 10; $i++){
+    echo $array[$i] . "\n";
+}
+
+/*
+Podstawowe różnice między tablicą PHP a obiektem klasy SplFixedArray
+    - obiekt klasy SplFixedArray musi mieć zdefiniowany stały rozmiar
+    - indeksami tablicy będącej obiektem klasy SplFixedArray muszą być liczby całkowite i należące do zakresu od 0 do n, gdzie n jest rozmiarem tablicy którą zdefiniowaliśmy.
+
+Klasa SplxFiexArray może się okazać bardzo przydatna, gdy mamy do czynienia z dużą liczbą tablic o znanych rozmiarach lub znamy górne granice rozmiarów wymaganych tablic. Jeśli
+jednak nie są nam znane te rozmiary, lepiej jest użyć tablic PHP. 
+*/
+echo "Wydajnosc zwyklych tablic \n";
+$startMemory = memory_get_usage(); //Returns the amount of memory, in bytes, that's currently being allocated to your PHP script.
+$arrayPHP = range(1,100000);
+$endMemory = memory_get_usage();
+echo "Tablica wykorzystuje: ". ($endMemory - $startMemory) . " bajtow";
+$memoryConsumed = ($endMemory - $startMemory) / (1024 * 1024);
+$memoryConsumed = round($memoryConsumed);
+echo "\nPamiec zwyklej tablicy(100tys. el) =  {$memoryConsumed} MB\n";
+//Wyjaśnienie skąd tak dużo PHP zużywa tak dużo pamięci strona 48 
+
+$items = 100000;
+$startMemory = memory_get_usage(); //Returns the amount of memory, in bytes, that's currently being allocated to your PHP script.
+$arraySpl = new SplFixedArray($items);
+for($i = 0; $i < $items; $i++){
+    $arraySpl[$i] = $i;
+}
+$endMemory = memory_get_usage();
+$memoryConsumed = ($endMemory - $startMemory) / (1024 * 1024);
+$memoryConsumed = ceil($memoryConsumed);
+echo "Pamiec obiektu SplFixedArray(100tys. el) =  {$memoryConsumed} MB\n";
+
+/*
+    Tablica SplFixArray ma mniejszy apetyt nie tylko na pamięć , lecz również zapewnia większą szybkość przetwarzania w porównaniu do ogólnych operacji 
+    na tablicach PHP, tj. uzyskiwanie dostępu do wartości, przypisywanie wartości itd. 
+    Nie da się w SplFixArray używać funkcji operującej na tablicach PHP tj. array_sum, array_filter itd. 
+    LINKI
+    https://www.npopov.com/2011/12/12/How-big-are-PHP-arrays-really-Hint-BIG.html
+*/
