@@ -78,15 +78,19 @@ class LinkedList {
     public function insertAfter(string $data = NULL, string $query = NULL) {
         $newNode = new ListNode($data);
         if($this->frontNode){
+            $nextNode = NULL; 
             $currentNode = $this->frontNode;
             while($currentNode !== NULL){
                 if($currentNode->data === $query){
-                    $newNode->next = $currentNode->next; 
-                    $currentNode->next = $newNode; 
+                    if($nextNode !== NULL) {
+                        $newNode->next = $nextNode; 
+                    }
+                    $currentNode->next = $newNode;
                     $this->_totalNodes++;
                     break;
                 }
-                $currentNode = $currentNode->next; 
+                $currentNode = $currentNode->next;
+                $nextNode = $currentNode->next;  
             }
         }
     }
