@@ -199,3 +199,52 @@ for($i = 0; $i < $items; $i++){
 $array->setSize(10);
 $array[7] = 100;
 var_dump($array);
+
+//Implementacja zbioru przy użyciu tablicy 
+$odd = [];
+for ($i = 1; $i < 10; $i = $i + 2){
+    $odd[$i] = $i; 
+}
+$prime = [];
+$prime[] = 2;
+$prime[] = 3;
+$prime[] = 5;
+
+if(in_array(2, $prime)){
+    echo "2 jest liczbą pierwszą. szuka po kolei w tablicy prime czy znajduje się 2 więc w najgorszym przypadku złożoność czasowna O(n)";
+}
+
+$union = array_merge($prime, $odd);
+$intersection = array_intersect($prime, $odd); //Computes the intersection of arrays // szuka części wspólnych - 3,5
+$compliment = array_diff($prime, $odd);
+
+/*
+PHP zapewnia wiele wbudowanych funkcji odpowiedzialnych za wykonywanie tego rodzaju operacji; możemy z nich korzystać, aby przeprowadzać operacje na zbiorach.
+Zbiór nie jest uporządkowany w żaden określony sposób, wyszukiwanie wartości za pomocą funkcji in_array() może w najgorszym przypadku mieć złożoność O(n).
+To samo dotyczy funkcji array_merge(), ponieważ porównuje ona każdą wartość z jednej tablicy z wartościami należącymi do drugiej. 
+
+MODYFIKACJA
+*/
+
+$odd = [];
+for ($i = 1; $i < 10; $i = $i + 2){
+    $odd[$i] = true; 
+}
+$prime = [];
+$prime[] = true;
+$prime[] = true;
+$prime[] = true;
+
+if(isset($prime[2])){
+    echo "\n2 jest liczbą pierwszą. Sprawdzone isset odnosimy sie kluczem od razu do wartości dzięki czemu złożoność czasowa O(1)";
+}
+
+$union = $prime + $odd; 
+$intersection = array_intersect_key($prime, $odd);
+$compliment = array_diff_key($prime, $odd);
+
+/*
+Analizując ten kod, można łatwo dostrzec, że do zdefiniowania zbioru korzystamu tu z indeksu lub też klucza. Jako że operacja wyszukiwania indeksu lub klucza
+w tablicy PHP ma złożoność O(1), mamy do czynienia ze znacznym przyśpieszeniem wyszukiwania elementów w zbiorze. W wyniku tego operacje wyszukiwania oraz działania
+sumy, iloczynu i dopełnienia będą wymagały znacznie mniej czasu niż te same działania na zbiorach z poprzedniego przykładu. 
+*/
