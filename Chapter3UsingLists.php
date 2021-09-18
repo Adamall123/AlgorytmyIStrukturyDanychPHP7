@@ -57,16 +57,22 @@ class LinkedList {
         }
         echo ' NULL';
     }
-    public function insertBefore(string $searchedData, string $data){
-        $searchedNode = $this->search($searchedData);
-        $currentNode = $this->frontNode;
-        if($searchedNode){
-            while($currentNode->next !== $searchedNode){
+    public function insertBefore(string $data = NULL, string $query = NULL){
+        $newNode = new ListNode($data);
+        if($this->frontNode){
+            //in book previous is equaled to Null but then program outputs error on line 69 when refer to method that instead of object it was null
+            $previous = $this->frontNode; 
+            $currentNode = $this->frontNode;
+            while($currentNode !== NULL){
+                if($currentNode->data === $query){
+                    $newNode->next = $currentNode;
+                    $previous->next = $newNode;
+                    $this->_totalNodes++;
+                    break;
+                }
+                $previous = $currentNode;
                 $currentNode = $currentNode->next;
             }
-            $newNode = new ListNode($data);
-            $currentNode->next = $newNode;
-            $newNode->next = $searchedNode; 
         }
     }
     public function search(string $data){
@@ -88,7 +94,7 @@ $linkedList->insert(25);
 $linkedList->insert(10);
 $linkedList->insert(52);
 
-$linkedList->insertBefore(25,19);
+$linkedList->insertBefore(19,25);
 
 $linkedList->display(); 
 
