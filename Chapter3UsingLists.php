@@ -32,7 +32,22 @@ class LinkedList {
         $this->_totalNodes++;
         return true;
     }
-
+    public function insertAtFirst(string $data = NULL){
+        $newNode = new ListNode($data);
+        if($this->frontNode === NULL){
+            $this->frontNode = &$newNode;
+        }else {
+            $newNode->next = $this->frontNode;
+            $this->frontNode = &$newNode;
+            /*in the book
+            $currentFronttNode = $this->_frondNode
+            $this->frontNode = &$newNode;
+            $newNode->next = $currentFronttNode;
+            */
+        }
+        $this->_totalNodes++;
+        return true;
+    }
     public function display(){
         echo "\nWszystkich elementow na liscie: " . $this->_totalNodes . "\n";
         $currentNode = $this->frontNode;
@@ -42,17 +57,32 @@ class LinkedList {
         }
         echo ' NULL';
     }
+    public function search(string $data){
+        if($this->_totalNodes){
+            $currentNode = $this->frontNode;
+            while($currentNode->next !== NULL){
+                if ($currentNode->data === $data ) return $currentNode;
+                $currentNode = $currentNode->next;
+            }
+        }
+        return false; 
+    }
 }
 
 $linkedList = new LinkedList();
 $linkedList->insert(37);
+$linkedList->insertAtFirst(10);
 $linkedList->insert(25);
 $linkedList->insert(10);
 $linkedList->insert(52);
 $linkedList->display(); 
 
+echo "\nZnaleziono: " . ($linkedList->search(10)->data);
+
 $bookTitles = new LinkedList();
+$bookTitles->insertAtFirst("Kocham Programowac");
 $bookTitles->insert("Wprowadzenie do algorytmow");
 $bookTitles->insert("Wprowadzenie do PHP i struktur danych");
+$bookTitles->insertAtFirst("Wzorce, Obiekty, PHP");
 $bookTitles->insert("Programowanie sztucznej inteligencji");
 $bookTitles->display();
