@@ -57,6 +57,18 @@ class LinkedList {
         }
         echo ' NULL';
     }
+    public function insertBefore(string $searchedData, string $data){
+        $searchedNode = $this->search($searchedData);
+        $currentNode = $this->frontNode;
+        if($searchedNode){
+            while($currentNode->next !== $searchedNode){
+                $currentNode = $currentNode->next;
+            }
+            $newNode = new ListNode($data);
+            $currentNode->next = $newNode;
+            $newNode->next = $searchedNode; 
+        }
+    }
     public function search(string $data){
         if($this->_totalNodes){
             $currentNode = $this->frontNode;
@@ -71,10 +83,13 @@ class LinkedList {
 
 $linkedList = new LinkedList();
 $linkedList->insert(37);
-$linkedList->insertAtFirst(10);
+$linkedList->insertAtFirst(16);
 $linkedList->insert(25);
 $linkedList->insert(10);
 $linkedList->insert(52);
+
+$linkedList->insertBefore(25,19);
+
 $linkedList->display(); 
 
 echo "\nZnaleziono: " . ($linkedList->search(10)->data);
