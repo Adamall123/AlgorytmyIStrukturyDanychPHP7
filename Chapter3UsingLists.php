@@ -94,6 +94,26 @@ class LinkedList {
             }
         }
     }
+    public function deleteNode(string $query){
+        
+        if($this->firstNode){
+            $previous = $this->frontNode;
+            $currentNode = $this->frontNode;
+            while($currentNode !== NULL){
+                if($currentNode->data === $query){
+                    if($currentNode->next === NULL) {
+                        $previous->next = NULL; 
+                    }else {
+                        $previous->next = $currentNode->next; 
+                    }
+                    $this->_totalNodes--;
+                    break;
+                }
+                $previous = $currentNode;
+                $currentNode = $currentNode->next;
+            }
+        }
+    }
     public function search(string $data){
         if($this->_totalNodes){
             $currentNode = $this->frontNode;
@@ -115,6 +135,7 @@ $linkedList->insert(52);
 
 $linkedList->insertBefore(19,25);
 $linkedList->insertAfter(49,25);
+$linkedList->deleteNode(25);
 $linkedList->display(); 
 
 echo "\nZnaleziono: " . ($linkedList->search(10)->data);
