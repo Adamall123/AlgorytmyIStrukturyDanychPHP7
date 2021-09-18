@@ -167,3 +167,35 @@ echo "Pamiec obiektu SplFixedArray(100tys. el) =  {$memoryConsumed} MB\n";
     LINKI
     https://www.npopov.com/2011/12/12/How-big-are-PHP-arrays-really-Hint-BIG.html
 */
+
+/*
+    Z uwagi na to, że tablice SplFixedArray są znacznie wydajniejsze niż tablice PHP, powinniśmy korzystać z tych pierwszych zamiast z tych drugich w przypadku 
+    w większości tworzonych algorytmów i struktur danych. 
+    WIECEJ PRZYKŁADÓW ZASTOSOWANIA TABLICY SPLFIXEDARRAY
+*/
+    //From PHP array to SplFixedArray
+    $newArray = [1 => 10, 2=> 100, 3=> 1000, 4=> 10000];  
+    $splArray = SplFixedArray::fromArray($newArray, false);
+    print_r($splArray);
+   
+//Jeśli chcemy skonwertować tablicę PHP na tablicę o stałym rozmiarze w czasie wykonania, dobym pomysłem będzie usunięcie tej pierwszej,
+//jeśli nie zamierzamy jej później używać. Pozwoli nam to zaoszczędzić miejsce w pamięci, co ma szczególne znaczenie, jeśli tablica jest wielka. 
+
+//From SplFixedArray to PHP array
+    $items = 5; 
+    $array = new SplFixedArray($items);
+    for($i = 0; $i < $items; $i++){
+        $array[$i] = $i * 10; 
+    }
+    $newArray = $array->toArray();
+    print_r($newArray);
+// Zmiana rozmiaru tablicy SplFixedArray po jej deklaracji 
+
+$items = 5; 
+$array = new SplFixedArray($items);
+for($i = 0; $i < $items; $i++){
+    $array[$i] = $i * 10; 
+}
+$array->setSize(10);
+$array[7] = 100;
+var_dump($array);
