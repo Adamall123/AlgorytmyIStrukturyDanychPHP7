@@ -96,7 +96,7 @@ class LinkedList {
     }
     public function deleteNode(string $query){
         
-        if($this->firstNode){
+        if($this->frontNode){
             $previous = $this->frontNode;
             $currentNode = $this->frontNode;
             while($currentNode !== NULL){
@@ -112,6 +112,25 @@ class LinkedList {
                 $previous = $currentNode;
                 $currentNode = $currentNode->next;
             }
+        }
+    }
+    /*
+    Przejście przez wszystkie węzły i zastąpienie następnego elementu poprzednim, poprzedniego - bieżącym oraz bieżącego - następnym 
+    */
+    public function reverse(){
+        if($this->frontNode !== NULL){
+            if($this->frontNode->next !== NULL){
+                $reversedList = NULL; 
+                $nextNode = NULL; 
+                $currentNode = $this->frontNode;
+            }
+            while($currentNode !== NULL){
+                $nextNode = $currentNode->next; 
+                $currentNode->next = $reversedList; 
+                $reversedList = $currentNode;
+                $currentNode = $nextNode;
+            }
+            $this->frontNode = $reversedList;
         }
     }
     public function search(string $data){
@@ -138,7 +157,12 @@ $linkedList->insertAfter(49,25);
 $linkedList->deleteNode(25);
 $linkedList->display(); 
 
-echo "\nZnaleziono: " . ($linkedList->search(10)->data);
+
+//echo "\nZnaleziono: " . ($linkedList->search(10)->data);
+
+
+$linkedList->reverse();
+$linkedList->display();
 
 $bookTitles = new LinkedList();
 $bookTitles->insertAtFirst("Kocham Programowac");
@@ -147,3 +171,4 @@ $bookTitles->insert("Wprowadzenie do PHP i struktur danych");
 $bookTitles->insertAtFirst("Wzorce, Obiekty, PHP");
 $bookTitles->insert("Programowanie sztucznej inteligencji");
 $bookTitles->display();
+
