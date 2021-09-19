@@ -230,3 +230,43 @@ echo "Iterowanie po obiekcie\n";
 for($bookTitles->rewind(); $bookTitles->valid(); $bookTitles->next()){
     echo $bookTitles->current() . "\n";
 }
+
+//Budowanie listy cyklicznej 
+
+class CircularLinkedList {
+    private $_frontNode = NULL; 
+    private $_totalNode = 0; 
+    public function insertAtEnd(string $data = NULL){
+        $newNode = new ListNode($data);
+        if($this->_frontNode === NULL){
+            $this->_frontNode = &$newNode; 
+        } else {
+            $currentNode = $this->_frontNode;
+            while($currentNode->next !== $this->_frontNode){
+                $currentNode = $currentNode->next; 
+            }
+            $currentNode->next = $newNode; 
+        }
+        $newNode->next = $this->_frontNode;
+        $this->_totalNode++;
+        return TRUE;
+    }
+    public function display(){
+        echo "Wszystkich elementow na liscie: " . $this->_totalNode . "\n";
+        $currentNode = $this->_frontNode;
+        while($currentNode->next !== $this->_frontNode){
+            echo $currentNode->data . "\n";
+            $currentNode = $currentNode->next; 
+        }
+        if ($currentNode){
+            echo $currentNode->data . "\n";
+        }
+    }
+}
+
+$circularLinkedList = new CircularLinkedList(); 
+$circularLinkedList->insertAtEnd("Hello");
+$circularLinkedList->insertAtEnd("What's");
+$circularLinkedList->insertAtEnd("Up?");
+$circularLinkedList->insertAtEnd("Go programming");
+$circularLinkedList->display();
