@@ -14,9 +14,29 @@ class ListNode {
     }
 }
 
-class LinkedList {
+class LinkedList implements Iterator{
     private $frontNode = NULL; 
     private $_totalNodes = 0; 
+    private $_currentNode = NULL; 
+    private $_currentPosition = 0; 
+
+    public function current(){
+        return $this->_currentNode->data; 
+    }
+    public function next(){
+        $this->_currentPosition++;
+        $this->_currentNode = $this->_currentNode->next; 
+    }
+    public function key(){
+        return $this->_currentPosition;
+    }
+    public function rewind(){
+        $this->_currentPosition = 0;
+        $this->_currentNode = $this->frontNode;
+    }
+    public function valid(){
+        return $this->_currentNode !== NULL; 
+    }
 
     public function insert(string $data = NULL){
         $newNode = new ListNode($data);
@@ -183,10 +203,30 @@ $bookTitles->insert("Wprowadzenie do algorytmow");
 $bookTitles->insert("Wprowadzenie do PHP i struktur danych");
 $bookTitles->insertAtFirst("Wzorce, Obiekty, PHP");
 $bookTitles->insert("Programowanie sztucznej inteligencji");
-$bookTitles->display();
+// $bookTitles->display();
 
-echo "\nDrugi element to: " . $bookTitles->getNthNode(2)->data;
-$bookTitles->reverse();
-$bookTitles->display();
+// echo "\nDrugi element to: " . $bookTitles->getNthNode(2)->data;
+// $bookTitles->reverse();
+// $bookTitles->display();
 
 
+/*
+ITEROWANIE PO OBIEKCIE 
+
+Gdy zajdzie potrzeba iterowania z zewnątrz przy użyciu obiektu listy warto skorzystać z interfejsu iteratora który udostępnia nam PHP
+Metody jakie zapewnia:
+- current: zwraca bieżący element 
+- next: przechodzi do następnego elementu
+- key: zwraca klucz bieżącego elementu 
+- rewind: przewija iterator wstecz do pierwszego elementu 
+- valid: sprawdza, czy bieżąca pozycja jest poprawna. 
+
+*/
+
+foreach($bookTitles as $title){
+    echo $title . "\n";
+}
+echo "Iterowanie po obiekcie\n";
+for($bookTitles->rewind(); $bookTitles->valid(); $bookTitles->next()){
+    echo $bookTitles->current() . "\n";
+}
