@@ -133,6 +133,19 @@ class LinkedList {
             $this->frontNode = $reversedList;
         }
     }
+    public function getNthNode(int $n = 0){
+        $count = 0; 
+        if($this->frontNode !== NULL){
+            $currentNode = $this->frontNode;
+            while($currentNode !== NULL){
+                if($count === $n){
+                    return $currentNode;
+                }
+                $count++;
+                $currentNode = $currentNode->next; 
+            }
+        }
+    }
     public function search(string $data){
         if($this->_totalNodes){
             $currentNode = $this->frontNode;
@@ -171,4 +184,9 @@ $bookTitles->insert("Wprowadzenie do PHP i struktur danych");
 $bookTitles->insertAtFirst("Wzorce, Obiekty, PHP");
 $bookTitles->insert("Programowanie sztucznej inteligencji");
 $bookTitles->display();
+
+echo "\nDrugi element to: " . $bookTitles->getNthNode(2)->data;
+$bookTitles->reverse();
+$bookTitles->display();
+
 
