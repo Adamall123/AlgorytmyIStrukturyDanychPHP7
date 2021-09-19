@@ -270,3 +270,191 @@ $circularLinkedList->insertAtEnd("What's");
 $circularLinkedList->insertAtEnd("Up?");
 $circularLinkedList->insertAtEnd("Go programming");
 $circularLinkedList->display();
+
+/*
+    LISTA DWUKIERUNKOWA 
+*/
+
+class ListNodeTwoWay {
+    public $data = NULL;
+    public $next = NULL;
+    public $prev = NULL; 
+
+    public function __construct(string $data = NULL)
+    {
+        $this->data = $data;         
+    }
+}
+
+class TwoWayLinkedList {
+
+    private $frontNode = NULL; 
+    private $lastNode = NULL; 
+    private $totalNode = 0;
+    public function insertAtFirst(string $data = NULL){
+        $newNode = new ListNodeTwoWay($data); 
+        if($this->frontNode === NULL){
+            $this->frontNode = &$newNode;
+            $this->lastNode = $newNode; 
+        } else {
+            $currentFirstNode = $this->frontNode; 
+            $this->frontNode = &$newNode; 
+            $newNode->next = $currentFirstNode; 
+            $currentFirstNode->prev = $newNode; 
+        }
+        $this->totalNode++;
+        return true; 
+    }
+    public function insertAtLast(string $data = NULL){
+        $newNode = new ListNodeTwoWay($data);
+        if($this->frontNode === NULL){
+            $this->frontNode = &$newNode;
+            $this->lastNode = $newNode; 
+        } else {
+            $currentNode = $this->lastNode;
+            $currentNode->next = $newNode; 
+            $newNode->prev = $currentNode; 
+            $this->lastNode = $newNode; 
+        }
+        $this->totalNode++;
+        return true;
+    }
+    public function insertBefore(string $data = NULL, string $query = NULL){
+        $newNode = new ListNodeTwoWay($data);
+        if($this->frontNode){
+            
+            $previous = NULL;
+            $currentNode = $this->frontNode;
+            while($currentNode !== NULL){
+                if($currentNode->data === $query){
+                    //added implementation in book not predicted when adding before head then the problem with displaying cause it was starting from head defined on line 327
+                    if(is_null($previous)){
+                        $this->frontNode = &$newNode;
+                    }
+                    $newNode->next = $currentNode; 
+                    $currentNode->prev = $newNode; 
+                    if(!is_null($previous))$previous->next = $newNode;
+                    $newNode->prev = $previous;
+                    $this->totalNode++;
+                    break; 
+                }
+                $previous = $currentNode; 
+                $currentNode = $currentNode->next; 
+            }
+        } 
+    }
+    public function insertAfter(string $data = NULL, string $query = NULL){
+        $newNode = new ListNodeTwoWay($data);
+        if($this->frontNode){
+            //in book $nextNode = null - can not work for case when we want insert after first element (head) 
+            // then we do not have indicator next for new added element. fixed by assigning indicator next of head. 
+            $nextNode = $this->frontNode->next;
+            $currentNode = $this->frontNode;
+            while($currentNode !== NULL){
+                if($currentNode->data === $query){
+                    if($nextNode !== NULL){
+                        $newNode->next = $nextNode; 
+                    }
+                    if($currentNode === $this->lastNode){
+                        $this->lastNode = $newNode; 
+                    }
+                    $currentNode->next = $newNode; 
+                    if(!is_null($nextNode))$nextNode->prev = $newNode; 
+                    $newNode->prev = $currentNode; 
+                    $this->totalNode++;
+                    break;
+                }
+                $currentNode = $currentNode->next; 
+                $nextNode = $currentNode->next; 
+            }
+        }
+    }
+    public function deleteFirst(){
+        if($this->frontNode !== NULL){
+            if($this->frontNode->next !== NULL){
+                $this->frontNode = $this->frontNode->next; 
+                $this->frontNode->prev = NULL;
+            } else {
+                $this->frontNode = NULL; 
+            }
+            $this->totalNode--;
+            return true;
+        }
+        return false;
+    }
+    public function deleteLast(){
+        if ($this->lastNode !== NULL){
+            $currentNode = $this->lastNode;
+            if($currentNode->prev === NULL){
+                $this->frontNode = NULL;
+                $this->lastNode = NULL; 
+            } else {
+                $previousNode = $currentNode->prev;
+                $this->lastNode = $previousNode;
+                $previousNode->next = NULL; 
+                $this->totalNode--;
+                return true;
+            }
+        }
+        return false; 
+    }
+    public function delete(string $query = NULL) {
+        if($this->frontNode){
+            $previous = NULL;
+            $currentNode = $this->frontNode; 
+            while($currentNode !== NULL){
+                if($currentNode->data === $query){
+                    if($currentNode->next === NULL){
+                        if(!is_null($previous)) $previous->next = NULL; 
+                    } else {
+                        if(!is_null($previous)) $previous->next = $currentNode->next;
+                        $currentNode->next->prev = $previous; 
+                    }
+                    $this->totalNode--;
+                    break;
+                }
+                $previous = $currentNode; 
+                $currentNode = $currentNode->next; 
+            }
+        }
+    }
+    public function displayForward(){
+        echo "Wszystkich elementow na liscie: " . $this->totalNode . "\n";
+        $currentNode = $this->frontNode;
+        while($currentNode !== NULL){
+            echo $currentNode->data . "\n";
+            $currentNode = $currentNode->next; 
+        }
+    }
+    public function displayBackward(){
+        echo "Wszystkich elementow na liscie: " . $this->totalNode . "\n";
+        $currentNode = $this->lastNode;
+        while($currentNode !== NULL){
+            echo $currentNode->data . "\n";
+            $currentNode = $currentNode->prev; 
+        }
+    }
+}
+
+$bookTitles = new TwoWayLinkedList();
+$bookTitles->insertAtFirst("Kocham Programowac");
+$bookTitles->insertAtFirst("Wzorce, Obiekty, PHP");
+$bookTitles->insertAtLast("Programowanie sztucznej inteligencji");
+$bookTitles->insertBefore("Wprowadzenie do PHP i struktur danych","Programowanie sztucznej inteligencji");
+$bookTitles->insertAfter("test123","Wzorce, Obiekty, PHP");
+$bookTitles->insertBefore("test","Wzorce, Obiekty, PHP");
+// $bookTitles->deleteFirst();
+// $bookTitles->deleteFirst();
+// $bookTitles->deleteLast();
+$bookTitles->delete("Kocham Programowac");
+$bookTitles->delete("test123");
+
+$bookTitles->displayForward();
+// $bookTitles->insert("Wprowadzenie do algorytmow");
+// $bookTitles->insert("Wprowadzenie do PHP i struktur danych");
+// $bookTitles->insertAtFirst("Wzorce, Obiekty, PHP");
+// $bookTitles->insert("Programowanie sztucznej inteligencji");
+
+/*
+    PHP oferuje implementację 
+*/
