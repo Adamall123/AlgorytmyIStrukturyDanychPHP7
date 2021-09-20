@@ -158,3 +158,72 @@ foreach ($expressions as $expression){
         echo "Wyrazenie jest nieprawidlowe \n";
     }
 }
+
+/*
+    Kolejna to liniowa struktura danych, działająca zgodnie z zasadą pierwszy na wejściu, pierwszy na wyjśćiu (FIFO). Operacje odbywaja się
+    na dwóch końcach kolejki: jeden z nich służy do dodawania elementów,a drugo do usuwania. Odróżnia to kolejkę od stosu, w przypadku którego
+    obydwa te działania obdywały się na końcu kolejki. Usuwanie elementów przeprwoadza się na jej początku czy też z przodu. Operacja 
+    dodawania nowego elementu do kolejki znana jest jako zakolejkowanie (enqueue) , a operacje usuwania mozna oreślić słowem "wykolejkowanie",
+    "zdekolejkowanie (dequeue). Pobieranie elementu znajdującego się na początku kolejki bez usuwania go znane jest jako zerkanie lub poglądanie
+    (peek) i stanowi operację analogiczną do operacji wykonaywanej na stosie przez metodę top. 
+*/
+
+interface Queue{
+
+    public function enqueue(string $item);
+    
+    public function dequeue(); 
+
+    public function peek(); 
+
+    public function isEmpty(); 
+}
+// IMPLEMENTACJA KOLEJKI ZA POMOCĄ TABLICY PHP 
+
+class AgentQueue implements Queue{
+    private $limit; 
+    private $queue;
+
+    public function __construct(int $limit = 20){
+        $this->limit = $limit;
+        $this->queue = [];
+    }
+
+    public function dequeue(): string{
+        if($this->isEmpty()){
+            throw new UnderflowException("Queue is empty.");
+        }else {
+            return array_shift($this->queue);
+        }
+    }
+
+    public function enqueue(string $newItem){
+        if(count($this->queue) < $this->limit){
+            array_push($this->queue, $newItem);
+        } else {
+            throw new OverflowException("Queue is full.");
+        }
+    }
+
+    public function peek(): string{
+        return current($this->queue);
+    }
+    
+    public function isEmpty(): bool{
+        return empty($this->queue);
+    }
+}
+
+try{
+    $agents = new AgentQueue(10);
+    $agents->enqueue("Franek");
+    $agents->enqueue("Janek");
+    $agents->enqueue("Krzysiek");
+    $agents->enqueue("Adrian");
+    $agents->enqueue("Michal");
+    echo $agents->dequeue() . "\n";
+    echo $agents->dequeue() . "\n";
+    echo $agents->peek() . "\n";
+}catch(Exception $e){
+    $e->getMessage();
+}
