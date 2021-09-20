@@ -107,3 +107,54 @@ try{
 }catch(Exception $e) {
     echo $e->getMessage();
 }
+
+// Stos ma zastosowania w wielu nowoczesnych aplikacjach  np. przykładami mogą być historia odwiedzanych stron przechowywana przez przeglądarkę. 
+
+function expressionChecker(string $expression): bool {
+    $valid = true; 
+    $stack = new SplStack(); 
+
+    for ($i = 0; $i < strlen($expression); $i++){
+        $char = substr($expression, $i, 1);
+        switch($char){
+            case '(':
+            case '{':
+            case '[': 
+                $stack->push($char);
+                break;
+            case ')': 
+            case '}':
+            case ']': 
+                if($stack->isEmpty()){
+                    $valid = false; 
+                } else {
+                    $last = $stack->pop(); 
+                    if ( ($char == ")" && $last != '(') || ($char == "}" && $last != '{') || 
+                        ($char == "]" && $last != '[')){
+                            $valid = false;
+                        }
+                }
+                break;
+        }
+        if(!$valid) 
+            break;
+    }
+    if(!$stack->isEmpty()){
+        $valid = false;
+    }
+    return $valid; 
+}
+
+$expressions = [];
+$expressions[] = "8 * ( 9 - 2) + { (4 * 5) / ( 2 * 2) }";
+$expressions[] = "5 * 8 * 9 / (3 * 2) )";
+$expressions[] = "[ (]{ ( 2 * 7) + (15 - 3) }]";
+
+foreach ($expressions as $expression){
+    $valid = expressionChecker($expression);
+    if($valid){
+        echo "Wyrazenie jest prawidlowe \n";
+    } else {
+        echo "Wyrazenie jest nieprawidlowe \n";
+    }
+}
