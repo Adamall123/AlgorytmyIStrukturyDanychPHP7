@@ -8,16 +8,17 @@
 class ListNode {
     public $data = NULL; 
     public $next = NULL; 
-
-    public function __construct(string $data = NULL){
+    public $priority = NULL;
+    public function __construct(string $data = NULL, int $priority = NULL){
         $this->data = $data; 
+        $this->priority = $priority;
     }
 }
 
 class LinkedList implements Iterator{
-    private $frontNode = NULL; 
-    private $lastNode = NULL; 
-    private $_totalNodes = 0; 
+    public $frontNode = NULL; 
+    public $lastNode = NULL; 
+    public $_totalNodes = 0; 
     private $_currentNode = NULL; 
     private $_currentPosition = 0; 
 
@@ -56,6 +57,33 @@ class LinkedList implements Iterator{
             $currentNode->next = $newNode;
         }
         $this->_totalNodes++;
+        return true;
+    }
+    public function insertWithPriority(string $data = NULL, int $priority = NULL){
+        $newNode = new ListNode($data);
+        $this->_totalNodes++;
+
+        if($this->frontNode === NULL){
+            $this->frontNode = &$newNode;
+        }else {
+            $previous = $this->frontNode;
+            $currentNode = $this->frontNode;
+            while($currentNode->next !== NULL){
+                if($currentNode->priority < $priority){
+                    if($currentNode == $this->frontNode){
+                        $previous = $this->frontNode;
+                        $this->frontNode = $newNode; 
+                        $newNode->next = $previous; 
+                        return; 
+                    }
+                    $newNode->next = $currentNode; 
+                    $previous->next = $newNode; 
+                    return;
+                }
+                $previous = $currentNode; 
+                $currentNode = $currentNode->next; 
+            }
+        }
         return true;
     }
     public function insertAtFirst(string $data = NULL){
@@ -138,6 +166,18 @@ class LinkedList implements Iterator{
                 $currentNode = $currentNode->next;
             }
         }
+    }
+    public function deleteFirst(){
+        if($this->frontNode !== NULL){
+            if($this->frontNode->next !== NULL){
+                $this->frontNode = $this->frontNode->next;
+            }else {
+                $this->frontNode = NULL; 
+            }
+            $this->_totalNodes--;
+            return true;
+        }
+        return false;
     }
     public function deleteLast(){
         if($this->frontNode){

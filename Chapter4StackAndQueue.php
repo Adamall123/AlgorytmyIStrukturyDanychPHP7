@@ -10,6 +10,9 @@
 // IMPLEMENTACJA STOSU ZA POMOCĄ TABLICY PHP 
 
 require_once('Chapter3UsingLists.php');
+require_once('InsertStrategy.php');
+require_once('Insert.php');
+require_once('InsertPriority.php');
 
 interface Stack {
     public function push(string $item);
@@ -170,7 +173,7 @@ foreach ($expressions as $expression){
 
 interface Queue{
 
-    public function enqueue(string $item);
+    public function enqueue(string $item, int $prior = 0);
     
     public function dequeue(); 
 
@@ -183,7 +186,7 @@ interface Queue{
 class AgentQueue implements Queue{
     private $limit; 
     private $queue;
-
+    
     public function __construct(int $limit = 20){
         $this->limit = $limit;
         $this->queue = [];
@@ -197,7 +200,7 @@ class AgentQueue implements Queue{
         }
     }
 
-    public function enqueue(string $newItem){
+    public function enqueue(string $newItem, int $prior = 0){
         if(count($this->queue) < $this->limit){
             array_push($this->queue, $newItem);
         } else {
@@ -231,12 +234,18 @@ try{
 class AgentQueueList implements queue{
     private $limit;
     private $queue;
-
-    public function __construct(int $limit = 20){
+    private InsertStrategy $insertStrategy; 
+    public function __construct(int $limit = 20, InsertStrategy $insertStrategy){
         $this->limit = $limit; 
         $this->queue = new LinkedList();
+        $this->insertStrategy = $insertStrategy; 
     }
-    
+    public function display(){
+        $this->queue->display(); 
+    }
+    public function returnQueue(): LinkedList{
+        return $this->queue;
+    }
     public function dequeue(): string{
         if($this->isEmpty()){
             throw new UnderflowException("Queue is empty.");
@@ -247,10 +256,11 @@ class AgentQueueList implements queue{
         }
     }
 
-    public function enqueue(string $newItem)
+    public function enqueue(string $newItem, int $prior = 0)
     {
         if($this->queue->getSize() < $this->limit){
-            $this->queue->insert($newItem);
+            //$this->queue->insert($newItem);
+            $this->insertStrategy->insert($newItem, $this->queue, $prior);
         }else{
             throw new OverflowException("Queue is full.");
         }
@@ -266,7 +276,8 @@ class AgentQueueList implements queue{
 }
 echo "LinkedList\n";
 try{
-    $agents = new AgentQueue(10);
+    $insertStrategy = new Insert();
+    $agents = new AgentQueueList(10, $insertStrategy);
     $agents->enqueue("Franek");
     $agents->enqueue("Janek");
     $agents->enqueue("Krzysiek");
@@ -280,17 +291,64 @@ try{
 }
 
 //SplQueue
-echo "SplQueue\n";
+// echo "SplQueue\n";
+// try{
+//     $agents = new SplQueue();
+//     $agents->enqueue("Franek");
+//     $agents->enqueue("Janek");
+//     $agents->enqueue("Krzysiek");
+//     $agents->enqueue("Adrian");
+//     $agents->enqueue("Michal");
+//     echo $agents->dequeue() . "\n";
+//     echo $agents->dequeue() . "\n";
+//     echo $agents->bottom() . "\n";
+// }catch(Exception $e){
+//     $e->getMessage();
+// }
+
+//KOLEJKA PRIORYTETOWA
+
+/*
+Kolejka priorytetowa to specjalny rodzaj kolejki, w przypadku której elementy są wstawiane i usuwane zgodnie z priorytetem.
+W świecie programowania komputerowego zastosowanie kolejki priorytetowej jest ogromne. Przykład: jest bardzo duży system
+kolejkowana wiadomości poczty elektronicznej, który wykorzystujemy do rozsyłania comiesięcznego biuletynu. Co gdy zachodzi
+potrzeba rozesłania do użytkowników jakiejś niezwykle pilnej wiadomości za pomocą tego systemu? Ogólna zasada działania 
+kolejek jest taka ,że każdy element dodaje się na jej końcu, doręczenie wówczas naszej wiadomości będzie bardzo mocno
+opóźnione. Aby rozwiązać ten problem, możemy skorzystać z kolejki priorytetowej. W takim przypadku do każdego węzła przypisuje
+się pewien priorytet i wszystkie węzły sortuje się zgodnie z ich priorytetami. Element o wyższym priorytecie zostanie 
+przeniesiony na początek listy, w związku z czym zostanie on obsłużony wcześniej niż węzły o niższych priorytetach. 
+
+Kolejke priorytetową można podzielić na 2 sposoby:
+
+1) SEKWENCJA UPORZĄDKOWANA
+
+Jeśli implementując kolejkę priorytetową, zdecydowaliśmy się użyć sekwencji uporządkowanej , możemy w jej przypadku 
+zastosować porządek rosnący lub malejący. Dobrą stroną korzystania z tego rodzaju sekwencji jest to, że możemy 
+szybko w niej znaleźć lub z niej usunąć element o najwyższym priorytecie; złożoność tego rodzaju operacji wynosi O(1)
+Więcej czasu zajmie jednak wstawianie elementu, ponieważ będzie ono wymagało sprawdzenia każdego elementu kolejki
+w celu umieszczenia nowego węzła w miejscu odpowiednim ze względu na jego priorytet
+
+2) SEKWENCJA NIEUPORZĄDKOWANA 
+
+Zastosowanie sekcji nieuporządkowanej nie zmusza nas do przechodzenia przez każdy element kolejki w celu umieszczenia
+w niej nowo dodanego elementu. Dodaje się do do końca kolejki, zgodnie z ogólną zasadą działania kolejek. Dzięki temu 
+złożoność operacji kolejkowania wynosi O(1). Jeśli jednak chcemy wyszukać lub usunąć element o najwyższym priorytecie, 
+musimy przejść przez każdy element kolejki, aby znaleźć właściwy węzeł. Co za tym idzie, rozwiązanie to nie jest 
+najlepsze , gdy chodzi o operacje wyszukiwania. 
+
+*/
+
+// IMPLEMENTACJA KOLEJKI PRIORYTETOWEJ PRZY UŻYCIU OPORZĄDKOWANEJ SEKWENCJI REALIZOWANEJ ZA POMOCĄ LISTY 
+
 try{
-    $agents = new SplQueue();
-    $agents->enqueue("Franek");
-    $agents->enqueue("Janek");
-    $agents->enqueue("Krzysiek");
-    $agents->enqueue("Adrian");
-    $agents->enqueue("Michal");
-    echo $agents->dequeue() . "\n";
-    echo $agents->dequeue() . "\n";
-    echo $agents->bottom() . "\n";
+    $insertWithPriority = new InsertPriority(); 
+    $agents = new AgentQueueList(10, $insertWithPriority);
+    $agents->enqueue("Franek", 1);
+    $agents->enqueue("Janek", 2);
+    $agents->enqueue("Krzysiek", 3);
+    $agents->enqueue("Adrian", 4);
+    $agents->enqueue("Michal", 2);
+    $agents->display(); 
 }catch(Exception $e){
     $e->getMessage();
 }
