@@ -213,7 +213,7 @@ class AgentQueue implements Queue{
         return empty($this->queue);
     }
 }
-
+echo "PHP array\n";
 try{
     $agents = new AgentQueue(10);
     $agents->enqueue("Franek");
@@ -224,6 +224,73 @@ try{
     echo $agents->dequeue() . "\n";
     echo $agents->dequeue() . "\n";
     echo $agents->peek() . "\n";
+}catch(Exception $e){
+    $e->getMessage();
+}
+
+class AgentQueueList implements queue{
+    private $limit;
+    private $queue;
+
+    public function __construct(int $limit = 20){
+        $this->limit = $limit; 
+        $this->queue = new LinkedList();
+    }
+    
+    public function dequeue(): string{
+        if($this->isEmpty()){
+            throw new UnderflowException("Queue is empty.");
+        } else {
+            $lastItem = $this->peek(); 
+            $this->queue->deleteFirst(); 
+            return $lastItem; 
+        }
+    }
+
+    public function enqueue(string $newItem)
+    {
+        if($this->queue->getSize() < $this->limit){
+            $this->queue->insert($newItem);
+        }else{
+            throw new OverflowException("Queue is full.");
+        }
+    }
+
+    public function peek(): string{
+        return $this->queue->getNthNode(1)->data;
+    }
+
+    public function isEmpty(): bool{
+        return $this->queue->getSize() == 0; 
+    }
+}
+echo "LinkedList\n";
+try{
+    $agents = new AgentQueue(10);
+    $agents->enqueue("Franek");
+    $agents->enqueue("Janek");
+    $agents->enqueue("Krzysiek");
+    $agents->enqueue("Adrian");
+    $agents->enqueue("Michal");
+    echo $agents->dequeue() . "\n";
+    echo $agents->dequeue() . "\n";
+    echo $agents->peek() . "\n";
+}catch(Exception $e){
+    $e->getMessage();
+}
+
+//SplQueue
+echo "SplQueue\n";
+try{
+    $agents = new SplQueue();
+    $agents->enqueue("Franek");
+    $agents->enqueue("Janek");
+    $agents->enqueue("Krzysiek");
+    $agents->enqueue("Adrian");
+    $agents->enqueue("Michal");
+    echo $agents->dequeue() . "\n";
+    echo $agents->dequeue() . "\n";
+    echo $agents->bottom() . "\n";
 }catch(Exception $e){
     $e->getMessage();
 }
