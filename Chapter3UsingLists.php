@@ -16,9 +16,14 @@ class ListNode {
 
 class LinkedList implements Iterator{
     private $frontNode = NULL; 
+    private $lastNode = NULL; 
     private $_totalNodes = 0; 
     private $_currentNode = NULL; 
     private $_currentPosition = 0; 
+
+    public function getSize(){
+        return $this->_totalNodes;
+    }
 
     public function current(){
         return $this->_currentNode->data; 
@@ -42,6 +47,7 @@ class LinkedList implements Iterator{
         $newNode = new ListNode($data);
         if($this->frontNode === NULL){
             $this->frontNode = &$newNode;
+            $this->lastNode = &$newNode; 
         }else {
             $currentNode = $this->frontNode;
             while($currentNode->next !== NULL){
@@ -115,7 +121,6 @@ class LinkedList implements Iterator{
         }
     }
     public function deleteNode(string $query){
-        
         if($this->frontNode){
             $previous = $this->frontNode;
             $currentNode = $this->frontNode;
@@ -133,6 +138,24 @@ class LinkedList implements Iterator{
                 $currentNode = $currentNode->next;
             }
         }
+    }
+    public function deleteLast(){
+        if($this->frontNode){
+            $currentNode = $this->frontNode;
+            if($currentNode->next === NULL){
+                $this->frontNode = NULL; 
+            } else {
+                $previousNode = NULL; 
+                while($currentNode->next !== NULL){
+                    $previousNode = $currentNode; 
+                    $currentNode = $currentNode->next; 
+                }
+                $previousNode->next = NULL; 
+                $this->_totalNodes--;
+                return true; 
+            }
+        }
+        return false; 
     }
     /*
     Przejście przez wszystkie węzły i zastąpienie następnego elementu poprzednim, poprzedniego - bieżącym oraz bieżącego - następnym 
@@ -154,9 +177,11 @@ class LinkedList implements Iterator{
         }
     }
     public function getNthNode(int $n = 0){
-        $count = 0; 
+        $count = 1; 
+       
         if($this->frontNode !== NULL){
             $currentNode = $this->frontNode;
+            
             while($currentNode !== NULL){
                 if($count === $n){
                     return $currentNode;
@@ -164,6 +189,7 @@ class LinkedList implements Iterator{
                 $count++;
                 $currentNode = $currentNode->next; 
             }
+            exit;
         }
     }
     public function search(string $data){

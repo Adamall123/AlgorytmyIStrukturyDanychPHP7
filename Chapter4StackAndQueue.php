@@ -9,6 +9,7 @@
 */
 // IMPLEMENTACJA STOSU ZA POMOCĄ TABLICY PHP 
 
+require_once('Chapter3UsingLists.php');
 
 interface Stack {
     public function push(string $item);
@@ -60,3 +61,49 @@ try{
     $e->getMessage();
 }
 
+//IMPLEMENTACJA STOSU ZA POMOCĄ LISTY 
+
+class BookList implements Stack {
+    private $stack; 
+
+    public function __construct(){
+        $this->stack = new LinkedList(); 
+    }
+
+    public function top(): string {
+        return $this->stack->getNthNode($this->stack->getSize())->data; 
+    }
+
+    public function isEmpty(): bool {
+        return $this->stack->getSize() == 0;
+    }
+
+    public function pop(): string{
+        
+        if($this->isEmpty()){
+            throw new UnderflowException("Stack is empty");
+        }else {
+            $lastItem = $this->top();
+            $this->stack->deleteLast(); 
+            return $lastItem;
+        }
+    }
+    public function push(string $newItem){
+        $this->stack->insert($newItem);
+    }
+}
+
+try{
+    echo "Książki - stos - lista \n";
+    $programmingBooks = new BookList();
+    $programmingBooks->push("Wprowadzenie do PHP7");
+    $programmingBooks->push("Rusz glowa - wzorce projektowe");
+    $programmingBooks->push("Rusz glowa - sql");
+   
+    echo $programmingBooks->pop() . "\n";
+    echo $programmingBooks->pop() . "\n";
+    echo $programmingBooks->top() . "\n";
+
+}catch(Exception $e) {
+    echo $e->getMessage();
+}
