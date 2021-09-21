@@ -25,7 +25,9 @@ class LinkedList implements Iterator{
     public function getSize(){
         return $this->_totalNodes;
     }
-
+    public function addTotalNodes(){
+        $this->_totalNodes++;
+    }
     public function current(){
         return $this->_currentNode->data; 
     }

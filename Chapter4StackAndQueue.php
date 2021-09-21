@@ -276,8 +276,7 @@ class AgentQueueList implements queue{
 }
 echo "LinkedList\n";
 try{
-    $insertStrategy = new Insert();
-    $agents = new AgentQueueList(10, $insertStrategy);
+    $agents = new AgentQueueList(10, new Insert());
     $agents->enqueue("Franek");
     $agents->enqueue("Janek");
     $agents->enqueue("Krzysiek");
@@ -341,8 +340,7 @@ najlepsze , gdy chodzi o operacje wyszukiwania.
 // IMPLEMENTACJA KOLEJKI PRIORYTETOWEJ PRZY UŻYCIU OPORZĄDKOWANEJ SEKWENCJI REALIZOWANEJ ZA POMOCĄ LISTY 
 
 try{
-    $insertWithPriority = new InsertPriority(); 
-    $agents = new AgentQueueList(10, $insertWithPriority);
+    $agents = new AgentQueueList(10, new InsertPriority());
     $agents->enqueue("Franek", 1);
     $agents->enqueue("Janek", 2);
     $agents->enqueue("Krzysiek", 3);
@@ -352,3 +350,35 @@ try{
 }catch(Exception $e){
     $e->getMessage();
 }
+
+/* 
+    IMPLEMENTACJA KOLEJKI PRIORYTETOWEJ ZA POMOCĄ KLASY SplPriorityQueue
+    Język PHP zapewnia wsparcie dla implementacji kolejki priorytetowej za pomocą SPL. Do utworzenia tego rodzaju
+    struktury danych możemy wykorzystać klasę SplPriorityQueue.
+*/
+
+class MyPQ extends SplPriorityQueue{
+    public function compare($priority1, $priority2){
+        if($priority1 === $priority2) return 0;
+        return $priority1 > $priority2 ? -1 : 1;
+        //return $priority1 <=> $priority2;
+    }
+}
+    echo "\nSplPriorityQueue\n";
+    $agents = new MyPQ();
+
+    $agents->insert("Franek", 1);
+    $agents->insert("Janek", 2);
+    $agents->insert("Krzysiek", 3);
+    $agents->insert("Adrian", 4);
+    $agents->insert("Michal", 2);
+
+    $agents->setExtractFlags(MyPQ::EXTR_BOTH);
+
+    $agents->top(); 
+
+    while($agents->valid()){
+        $current = $agents->current();
+        echo $current['data'] . "\n";
+        $agents->next();
+    }
