@@ -382,3 +382,89 @@ class MyPQ extends SplPriorityQueue{
         echo $current['data'] . "\n";
         $agents->next();
     }
+
+    /*
+        IMPLEMENTACJA KOLEJKI CYKLICZNEJ 
+        Korzystając ze standardowej kolejki, za każdym razem gdy usuwamy z niej element, musimy odpowiednio przesunąć całą kolejkę. 
+        W kolejce cyklicznej po końcu następuje początek, dzięki czemu powstaje koło czy też cykl. Ten szczególny typ kolejki
+        wymaga specjalnych obliczeń wykonywanych przy operacjach dodawania elementu do kolejki i usuwania elementu z kolejki, 
+        a związanych z jej końcem, początkiem oraz wielkością. Kolejki cykliczne mają zawsze stały rozmiar i znane są także 
+        jako bufory cykliczne lub bufory pierścieniowe.
+    */
+
+    class CircularQueue implements Queue{
+
+        private $queue; 
+        private $limit; 
+        private $front = 0;
+        private $rear = 0; 
+
+        public function __construct(int $limit = 5 ){
+            $this->limit = $limit;
+            $this->queue = [];
+        }
+        
+        public function size() {
+            if ($this->rear > $this->front)
+                return $this->rear - $this->front;
+            return $this->limit - $this->front + $this->rear; 
+        }
+
+        public function isEmpty(){
+            return $this->rear == $this->front; 
+        }
+
+        public function isFull(){
+            
+            $diff = $this->rear - $this->front; 
+            if($diff == -1 || $diff == ($this->limit  )){
+                return true;  
+            }   
+            return false; 
+        }
+
+        public function enqueue(string $item, int $prior = 0){
+            if($this->isFull()){
+                throw new OverflowException("Queue is full.");
+            }else{
+                
+                $this->queue[$this->rear] = $item;
+                echo  $this->queue[$this->rear] . ", ";
+                
+                $this->rear = ($this->rear + 1) % ($this->limit + 1); 
+            }
+        }
+
+        public function dequeue()
+        {
+            $item = "";
+            if($this->isEmpty()){
+                throw new UnderflowException("Queue is empty.");
+            } else {
+                $item = $this->queue[$this->front];
+                $this->queue[$this->front] = NULL; 
+                $this->front = ($this->front + 1) % ($this->limit + 1);
+            }
+            return $item; 
+        }
+
+        public function peek(){
+            return $this->queue[$this->front];
+        }
+    }
+
+    echo "CircularQueue\n";
+try{
+    $agents = new CircularQueue();
+    $agents->enqueue("Franek");
+    $agents->enqueue("Janek");
+    $agents->enqueue("Krzysiek");
+    $agents->enqueue("Adrian");
+    $agents->enqueue("Michal");
+    
+    echo "\n" . $agents->dequeue() . "\n";
+    //echo $agents->dequeue() . "\n";
+    echo 'peek: ' .  $agents->peek() . "\n";
+}catch(Exception $e){
+    $e->getMessage();
+}  
