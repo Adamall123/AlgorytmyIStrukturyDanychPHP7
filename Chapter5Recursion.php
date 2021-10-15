@@ -37,7 +37,7 @@ function fibonacci(int $n): int {
         return fibonacci($n-1) + fibonacci($n - 2);
     }
 }
-echo fibonacci(6);
+// echo fibonacci(6);
 //implementacja obliczania NWD za pomocą rekurencji (Greatest Common Division - GCD)
 
 function gcd(int $a, int $b): int {
@@ -72,3 +72,70 @@ function gcd(int $a, int $b): int {
     bazowy jest poszukiwaną odpowiedzią.
     
 */
+
+class Category {
+    //as only for training propertiees are set to public 
+    public $id;
+    public $categoryName; 
+    public $parentCategory;
+    public $SortInd; 
+
+    function __construct($id, $categoryName, $parentCategory, $SortInd) {
+        $this->id = $id; 
+        $this->categoryName = $categoryName;
+        $this->parentCategory = $parentCategory;
+        $this->SortInd = $SortInd;
+    }
+}
+
+$one = new Category(1, "Pierwsza", 0, 0);
+$two = new Category(2, "Druga", 1, 0);
+$three = new Category(3, "Trzecia", 1, 1);
+$four = new Category(4, "Czwarta", 3, 0);
+$five = new Category(5, "Piata", 4, 0);
+$six = new Category(6, "Szosta", 5, 0);
+$seven = new Category(7, "Siodma", 6, 0);
+$eight = new Category(8, "Osma", 7, 0);
+$nine = new Category(9, "Dziewiata", 1, 0);
+$ten = new Category(10, "Dziesiata", 2, 1);
+
+$categories[0][] = $one; 
+$categories[1][] = $two; 
+$categories[1][] = $three; 
+$categories[3][] = $four; 
+$categories[4][] = $five; 
+$categories[5][] = $six; 
+$categories[6][] = $seven; 
+$categories[7][] = $eight; 
+$categories[1][] = $nine; 
+$categories[2][] = $ten; 
+
+
+function showCategoryTree(Array $categories, int $n)
+{
+    if(isset($categories[$n]))
+    {
+
+        foreach($categories[$n] as $category)
+        {
+            echo str_repeat("-", $n)."".$category->categoryName."\n";
+            showCategoryTree($categories, $category->id);
+        }
+    }
+    return;
+}
+
+showCategoryTree($categories, 0);
+
+/*
+    Przedstawiony powyżej kod odpowiada za rekurencyjne wyświetlanie kategori i ich kategorii potomnych. 
+    Zaczynamy od wzięcia pewnego poziomu i wyświetlenia kategorii znajdującej się na tym poziomie. Za 
+    pomocą instrukcji ShoCategoryTree($categories, $category->id) sprawdzamy od razu, czy ma ona jakieś
+    kategorie poziomu dziecka. Jeśli wywołamy naszą rekurencyjną funkcję z argumentem wskazującycm
+    korzeń struktury (tutaj poziom 0) to na ekreanie zostanie pokazane całe drzewo. 
+    Na podanym przykładzie widać ,że da się budować zagnieżdżone struktury kategorii lub menu, 
+    BEZ KONIECZNOŚCI PRZEJMOWANIA SIĘ LICZBĄ POZIOMÓW KATEGORII czy tworzenia wielu zapytań
+    bazodanowych, lecz wyłącznie za pomocą prostego zapytania i odpowiednio napisanej funkcji rekurencyjnej.
+    Jest to przykład rekurencji igonowej, w której wyświetlamy kolejne wyniki z postępem rekurencji.
+    Unikamy implementacje związane z liczbą klauzul join. 
+ */
