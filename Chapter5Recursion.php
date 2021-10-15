@@ -125,7 +125,7 @@ function showCategoryTree(Array $categories, int $n)
     return;
 }
 
-showCategoryTree($categories, 0);
+//showCategoryTree($categories, 0);
 
 /*
     Przedstawiony powyżej kod odpowiada za rekurencyjne wyświetlanie kategori i ich kategorii potomnych. 
@@ -139,3 +139,38 @@ showCategoryTree($categories, 0);
     Jest to przykład rekurencji igonowej, w której wyświetlamy kolejne wyniki z postępem rekurencji.
     Unikamy implementacje związane z liczbą klauzul join. 
  */
+
+ function showFiles(string $dirName, Array &$allFiles = [])
+ {
+     $files = scandir($dirName);
+     
+   
+    
+     foreach ($files as $key => $value)
+     {
+         $path = realpath($dirName . DIRECTORY_SEPARATOR . $value);
+         if(!is_dir($path)){
+             $allFiles[] = $path; 
+         }else if ($value != "." && $value != ".."){
+             showFiles($path, $allFiles);
+             $allFiles[] = $path;
+         }
+     }
+     return; 
+ }
+
+ $files = [];
+
+ showFiles(".", $files);
+
+ /*
+  Rozwiązanie rekurencyjne jest dobre do wyszukiwania plików i katalogów. Funkcja showFiles
+  przyjmuje jako swój argument nazwę katalogu, który przegląda w celu utworzenia listy 
+  należących do niego plików i katalogów. Następnie w pętli foreach przechodzimy przez 
+  wszystkie znalezione w ten sposób elementy. Działanie trwa do momentu gdy uda się przejść przez 
+  wszystkie pliki i katalogi. 
+  */
+ foreach($files as $file)
+ {
+     echo $file . "\n";
+ }
