@@ -7,11 +7,13 @@ Konstruowanie binarnego drzewa poszukiwań
 class Node {
     public $data;
     public $left; 
-    public $right; 
+    public $right;
+    public $parent;  
 
-    public function __construct(int $data = NULL)
+    public function __construct(int $data = NULL, Node $parent = NULL)
     {
         $this->data = $data; 
+        $this->parent = $parent; 
         $this->left = NULL;
         $this->right = NULL; 
     }
@@ -51,6 +53,18 @@ class Node {
         else 
             return NULL; 
     }
+    public function delete() {
+        $node = $this;
+       
+        //1 przypadek - dzieci nieobecne
+        if (!$node->left && !$node->right) {
+            if ($node->parent->left === $node){
+                $node->parent->left = NULL;
+            } else {
+                $node->parent->right = NULL; 
+            }
+        }
+    }
 }
 
 class BST {
@@ -81,7 +95,7 @@ class BST {
                 if($node->right) {
                     $node = $node->right; 
                 } else {
-                    $node->right = new Node($data); 
+                    $node->right = new Node($data, $node); 
                     $node = $node->right; 
                     break; 
                 }
@@ -89,7 +103,7 @@ class BST {
                 if($node->left) {
                     $node = $node->left; 
                 } else {
-                    $node->left = new Node($data);
+                    $node->left = new Node($data, $node);
                     $node = $node->left; 
                     break;
                 }
@@ -130,6 +144,13 @@ class BST {
         }
         return $node; 
     }
+
+   
+
+    public function remove(int $data){
+        $node = $this->search($data);
+        if($node) $node->delete();
+    }
 }
 
 $tree = new BST(10);
@@ -150,3 +171,5 @@ echo  $tree->search(7) ? "Znaleziono\n" : "Nieznaleziono\n";
 echo  $tree->search(36) ? "Znaleziono\n" : "Nieznaleziono\n";
 echo "\n";
 
+$tree->remove(8);
+$tree->traverse($tree->root);
