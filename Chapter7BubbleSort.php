@@ -23,7 +23,7 @@ function bubbleSort(array $arr): array {
     global $counter;
     for($i = 0; $i < $len; $i++){
         $swapped = FALSE; 
-        for($j = 0; $j < $len  - 1; $j++){
+        for($j = 0; $j < $len  - $i -  1 ; $j++){
             $counter++;
             if ($arr[$j] > $arr[$j + 1]){
                 $tmp = $arr[$j + 1];
@@ -42,10 +42,12 @@ $arr = [20, 45, 93, 67, 10, 97, 52, 88, 33, 92];
 $sortedArray = bubbleSort($arr);
 echo implode(",", $sortedArray);
 
-echo "\n Sortowanie bąbelkowe (ulepszenie 1): " . $counter;
+echo "\n Sortowanie bąbelkowe (ulepszenie 2): " . $counter;
 
 /*
 Rozwiązanie                 | Licznik Porównań |
 Zwykłe sortowanie bąbelkowe | 90               |
 Ulepszenie 1                | 63               | Dodanie flagi - gdy nie dokona w pętli wewnętrznej ani jednego porównania to jest już tablica posortowana i można zakończyć działanie
+Ulepszenie 2                | 42               | Redukcja liczby iteracji wewnętrznej pętli o liczbę wykonanych iteracji pętli zewnętrznej - na ostatnim miejscu umieszczane są największe liczby
+
 */
