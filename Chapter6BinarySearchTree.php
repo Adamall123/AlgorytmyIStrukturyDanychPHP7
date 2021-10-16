@@ -111,6 +111,25 @@ class BST {
                 $this->traverse($node->right);
         }
     }
+
+    public function search(int $data) {
+        if($this->isEmpty()){
+            return FALSE; 
+        }
+
+        $node = $this->root; 
+
+        while($node) {
+            if($data > $node->data) {
+                $node = $node->right;
+            } elseif ($data < $node->data) {
+                $node = $node->left; 
+            } else {
+                break; 
+            }
+        }
+        return $node; 
+    }
 }
 
 $tree = new BST(10);
@@ -126,3 +145,8 @@ $tree->insert(36);
 
 
 $tree->traverse($tree->root);
+
+echo  $tree->search(7) ? "Znaleziono\n" : "Nieznaleziono\n";
+echo  $tree->search(36) ? "Znaleziono\n" : "Nieznaleziono\n";
+echo "\n";
+
