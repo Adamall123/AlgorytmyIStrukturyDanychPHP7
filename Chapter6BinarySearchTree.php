@@ -20,7 +20,7 @@ class Node {
 
     public function min() {
         $node = $this; 
-
+        
         while($node->left){
             $node = $node->left; 
         }
@@ -63,6 +63,11 @@ class Node {
             } else {
                 $node->parent->right = NULL; 
             }
+        //2 przypadek - dwójka dzieci 
+        } elseif ($node->left && $node->right){
+            $successor = $node->successor();
+            $node->data = $successor->data; 
+            $successor->delete();
         }
     }
 }
@@ -171,5 +176,5 @@ echo  $tree->search(7) ? "Znaleziono\n" : "Nieznaleziono\n";
 echo  $tree->search(36) ? "Znaleziono\n" : "Nieznaleziono\n";
 echo "\n";
 
-$tree->remove(8);
+$tree->remove(15);
 $tree->traverse($tree->root);
