@@ -170,7 +170,29 @@ function showCategoryTree(Array $categories, int $n)
   wszystkie znalezione w ten sposób elementy. Działanie trwa do momentu gdy uda się przejść przez 
   wszystkie pliki i katalogi. 
   */
- foreach($files as $file)
- {
-     echo $file . "\n";
- }
+//  foreach($files as $file)
+//  {
+//      echo $file . "\n";
+//  }
+
+/*
+    Wbudowanka funkcja PHP o nazwie array_walk_recursive umożliwia rekurencyjne przechodzenie 
+    przez tablicę dowolnej wielkości oraz stosowanie funcki wywołania zwrotnego. Z funkcji tej
+    możemy skorzystać gdy chcemy np. sprawdzić czy element należy do tablicy wielowymiarowej 
+    tablicy, lub też gdy zamierzamy obliczyć sumę elementów tablic należących do tablicy
+    wielowymiarowej. 
+ */
+
+ function array_sum_recursive(Array $array) {
+     $sum = 0;
+     array_walk_recursive($array, function($v) use (&$sum) {
+        $sum += $v; 
+     });
+     return $sum;
+    }
+
+    $arr = [1,2,3,4,5, [6,7, [8,9,10, [11,12,13, [14,15,16]]]]];
+
+    echo array_sum_recursive($arr);
+
+    //array_walk_recursive — Apply a user function recursively to every member of an array
