@@ -77,6 +77,16 @@ class Node {
                 $node->parent->right = $node->left;
                 $node->left->parent = $node->parent->right; 
             }
+            $node->left = NULL; 
+        } elseif ($node->right){
+            if($node->parent->left === $node){
+                $node->parent->left = $node->right; 
+                $node->right->parent = $node->parent->left; 
+            } else {
+                $node->parent->right = $node->right; 
+                $node->right->parent = $node->parent->right; 
+            }
+            $node->right = NULL; 
         }
     }
 }
@@ -171,7 +181,7 @@ $tree = new BST(10);
 
 $tree->insert(12);
 $tree->insert(6);
-$tree->insert(3);
+ $tree->insert(3);
 $tree->insert(8);
 $tree->insert(15);
 $tree->insert(13);
