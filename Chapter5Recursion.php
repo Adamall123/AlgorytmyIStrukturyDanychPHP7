@@ -193,6 +193,57 @@ function showCategoryTree(Array $categories, int $n)
 
     $arr = [1,2,3,4,5, [6,7, [8,9,10, [11,12,13, [14,15,16]]]]];
 
-    echo array_sum_recursive($arr);
+    // echo array_sum_recursive($arr);
 
     //array_walk_recursive — Apply a user function recursively to every member of an array
+
+    /*
+        RecursiveTreeIterator umożliwia tworzenie przypominające drzewo graficzne reprezentacji
+        dowolnego katalogu lub tablicy wielowymiarowej.
+     */
+
+
+     //https://www.codepunker.com/blog/basic-usage-of-closures-in-php
+     /* Closure
+      Their most important use is for callback functions. Basically a closure in PHP 
+      is a function that can be created without a specified name - an anonymous function. 
+     */
+    echo "Understanding Closure (it was used in array_walk_recursive):\n";
+    echo "Example 1:\n";
+     $array = array('C++', 'PHP', 'JavaScript', 'Java');
+     array_walk($array, function(&$v, $k) {
+        $v = $v . ' - Programming Language';
+     });
+     print_r($array);
+     echo "\nExample 2:\n";
+     $param = 'John!';
+     function sayHello()
+     {
+         $param = 'Michael';
+         //the closure will inherit value of $param from its parent scope which is the scope of the sayHello() function, 
+         // NOT the global scope and therefore the script will output 'Hi, I am Michael'
+         $func = function() use ($param)
+         {
+             echo 'Hi, I am ' . $param; 
+         };
+         $func();
+     }
+     sayHello();
+     echo "\nUpdate: Arrow functions starting with PHP 7.4\n";
+     echo "Example 3 (classic closure): \n";
+     /**
+      * 7.4 PHP has the ability to interpret "arrow functions". Besides the obvious advantage of being shorter and more
+      * readeable than classic anonymous functions, arrow funcction can acccess variables from th parent scope through
+      * a techniqe called "implicit by - value scope binding"
+      */
+     $name = 'Adam';
+     $calc = function() use($name) {
+         return "Hello " . $name;
+     };
+     echo $calc();
+     echo "\nExample 3 (short closure): \n";
+     $calc = fn() => "Hello " . $name; 
+     echo $calc();
+
+     // Arrow functions can only have one expression - the return statement 
+     // The outer scope variables are accessible by valye only , so there's no way to modfy them 
