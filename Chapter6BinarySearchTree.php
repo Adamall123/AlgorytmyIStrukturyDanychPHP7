@@ -68,6 +68,15 @@ class Node {
             $successor = $node->successor();
             $node->data = $successor->data; 
             $successor->delete();
+        //3 przypadek - obecne jedno lewe dziecko 
+        } elseif ($node->left) {
+            if($node->parent->left === $node) {
+                $node->parent->left = $node->left;
+                $node->left->parent = $node->parent->left; 
+            } else {
+                $node->parent->right = $node->left;
+                $node->left->parent = $node->parent->right; 
+            }
         }
     }
 }
@@ -163,7 +172,6 @@ $tree = new BST(10);
 $tree->insert(12);
 $tree->insert(6);
 $tree->insert(3);
-
 $tree->insert(8);
 $tree->insert(15);
 $tree->insert(13);
@@ -176,5 +184,5 @@ echo  $tree->search(7) ? "Znaleziono\n" : "Nieznaleziono\n";
 echo  $tree->search(36) ? "Znaleziono\n" : "Nieznaleziono\n";
 echo "\n";
 
-$tree->remove(15);
+$tree->remove(6);
 $tree->traverse($tree->root);
