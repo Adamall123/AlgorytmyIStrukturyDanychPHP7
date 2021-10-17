@@ -42,3 +42,35 @@ if(binarySearch($numbers, $number)){
 } else {
     echo "Nieznaleziona\n";
 }
+
+function binarySearchRecursion(array $numbers, int $needle, int $low, int $high): bool {
+    if($high < $low) {
+        return FALSE;
+    }
+
+    $mid = (int) (($low + $high) / 2 );
+
+    if($numbers[$mid] > $needle ) {
+        return binarySearchRecursion($numbers, $needle, $low, $mid-1);
+    } elseif($numbers[$mid] < $needle) {
+        return binarySearchRecursion($numbers, $needle, $mid + 1, $high);
+    } else {
+        return TRUE;
+    }
+}
+
+$number = 31;
+
+if(binarySearchRecursion($numbers, $number, 0, count($numbers) - 1)){
+    echo "Znaleziono\n";
+} else {
+    echo "Nieznaleziona\n";
+}
+
+$number = 500;
+
+if(binarySearchRecursion($numbers, $number, 0, count($numbers) - 1)){
+    echo "Znaleziono\n";
+} else {
+    echo "Nieznaleziona\n";
+}
