@@ -74,3 +74,41 @@ if(binarySearchRecursion($numbers, $number, 0, count($numbers) - 1)){
 } else {
     echo "Nieznaleziona\n";
 }
+
+function repetetiveBinarySearch(array $numbers, int $needle): int {
+    $low = 0;
+    $high = count($numbers) - 1; 
+    $firstOccurence = -1; 
+
+    while($low <= $high) {
+        $mid = (int) (($low + $high) / 2);
+
+        if($numbers[$mid] === $needle) {
+            $firstOccurence = $mid; 
+            $high = $mid - 1; 
+        } else if($numbers[$mid] > $needle) {
+            $high = $mid - 1;
+        } else {
+            $low = $mid + 1;
+        }
+    }
+    return $firstOccurence; 
+}
+
+echo "\nRepetetive Binary Search\n";
+$numbers = [1,2,2,2,2,2,2,2,2,3,3,3,3,3,4,4,5,5];
+$number = 2; 
+$pos = repetetiveBinarySearch($numbers, $number);
+if($pos>= 0) {
+    echo "$number znalezione na pozycji $pos\n";
+} else {
+    echo "$number nie znalezione \n";
+}
+$number = 5; 
+$pos = repetetiveBinarySearch($numbers, $number);
+if($pos>= 0) {
+    echo "$number znalezione na pozycji $pos\n";
+} else {
+    echo "$number nie znalezione \n";
+}
+
