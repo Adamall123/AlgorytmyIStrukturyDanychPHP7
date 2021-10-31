@@ -18,21 +18,26 @@ class TreeNode
 class Tree {
 
     public $root = NULL; 
-    public $visited; 
 
     public function __construct(TreeNode $node)
     {
         $this->root = $node; 
-        $this->visited = new SplQueue;
     }
 
-    public function DFS(TreeNode $node) {
-        $this->visited->enqueue($node);
-        if($node->children){
-            foreach($node->children as $child){
-                $this->DFS($child);
-            }
-        }
+    public function DFS(TreeNode $node): SplQueue {
+       $stack = new SplStack;
+       $visited = new SplQueue; 
+       $stack->push($node);
+    
+       while(!$stack->isEmpty()){
+           $current = $stack->pop();
+           $visited->enqueue($current);
+           //$current->children = array_reverse($current->children);
+           foreach($current->children as $child) {
+               $stack->push($child);
+           }
+       }
+       return $visited; 
     }
 }
 
@@ -56,8 +61,8 @@ try {
     $node4->addChildren($node7);
     $node5->addChildren($node8);
 
-    $tree->DFS($tree->root);
-    $visited = $tree->visited; 
+    
+    $visited = $tree->DFS($tree->root); 
     $lookForNumber = 1;
     echo "We are looking for $lookForNumber\n";
     while(!$visited->isEmpty()){
