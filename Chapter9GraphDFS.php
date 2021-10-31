@@ -18,7 +18,7 @@ $graph[3][2] = $graph[2][3] = 1;
 $graph[6][4] = $graph[4][6] = 1;
 
 
-function DFS(array &$graph, int $start, array $visited): SplQueue{
+function DFS(array &$graph, int $start, array $visited, int $searchedNode): bool{
     $stack = new SplStack;
     $path = new SplQueue;
 
@@ -27,19 +27,24 @@ function DFS(array &$graph, int $start, array $visited): SplQueue{
 
     while(!$stack->isEmpty()) {
         $node = $stack->pop();
+        if($node === $searchedNode){
+            return 1;
+        }
         $path->enqueue($node);
         foreach ($graph[$node] as $key => $vertex) {
+
             if (!$visited[$key] && $vertex == 1) {
                 $visited[$key] = 1; 
                 $stack->push($key);
             }
         }
     }
-    return $path;
+    return 0;
 }
-
-$path = DFS($graph, 1, $visited);
-
-while(!$path->isEmpty()){
-    echo $path->dequeue() . "\t";
+$searchedNumber = 1;
+$found = DFS($graph, 5, $visited, $searchedNumber);
+if($found){
+    echo "$searchedNumber has been found.";
+}else{
+    echo "$searchedNumber has not been found";
 }
